@@ -19,14 +19,14 @@ export function HistoryScreen({ semesters }: HistoryScreenProps) {
     <div className="grid gap-5">
       <header>
         <p className="text-sm text-[var(--text-secondary)]">Semestres arquivados</p>
-        <h1 className="text-3xl font-bold">Histórico</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Histórico</h1>
       </header>
       {semesters.length ? (
         semesters.map((semester) => {
           const open = openIds.includes(semester.id);
           return (
-            <section key={semester.id} className="glass rounded-[28px] p-4">
-              <button className="flex w-full items-center justify-between text-left" type="button" onClick={() => toggle(semester.id)}>
+            <section key={semester.id} className="glass rounded-[26px] p-4">
+              <button className="flex w-full items-center justify-between gap-3 text-left" type="button" onClick={() => toggle(semester.id)}>
                 <div>
                   <h2 className="text-lg font-bold">{semester.name}</h2>
                   <p className="text-sm text-[var(--text-secondary)]">{semester.subjects.length} matérias</p>
@@ -41,8 +41,8 @@ export function HistoryScreen({ semesters }: HistoryScreenProps) {
                       return (
                         <div key={subject.id} className="rounded-[22px] bg-white/[0.06] p-3">
                           <div className="flex items-center justify-between gap-3">
-                            <div>
-                              <p className="font-semibold">{subject.name}</p>
+                            <div className="min-w-0">
+                              <p className="truncate font-semibold">{subject.name}</p>
                               <p className="text-sm text-[var(--text-secondary)]">MF {formatGrade(grade.average)}</p>
                             </div>
                             <Badge tone={grade.status === 'approved' ? 'green' : grade.status === 'risk' ? 'red' : 'gray'}>{statusLabel(grade.status)}</Badge>
@@ -59,7 +59,7 @@ export function HistoryScreen({ semesters }: HistoryScreenProps) {
           );
         })
       ) : (
-        <p className="rounded-[24px] border border-dashed border-white/10 p-5 text-center text-sm text-[var(--text-secondary)]">Nenhum semestre encerrado ainda.</p>
+        <p className="rounded-[24px] border border-dashed border-white/[0.12] bg-white/[0.035] p-5 text-center text-sm leading-5 text-[var(--text-secondary)]">Nenhum semestre encerrado ainda.</p>
       )}
     </div>
   );

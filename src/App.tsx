@@ -13,9 +13,9 @@ import { SettingsScreen } from './components/settings/SettingsScreen';
 
 function EmptyHome() {
   return (
-    <div className="rounded-[28px] border border-dashed border-white/10 p-6 text-center">
+    <div className="rounded-[26px] border border-dashed border-white/[0.12] bg-white/[0.035] p-6 text-center">
       <p className="text-lg font-semibold">Sem matérias ainda</p>
-      <p className="mt-2 text-sm text-[var(--text-secondary)]">Cadastre a primeira matéria para começar a acompanhar notas, faltas e avaliações.</p>
+      <p className="mt-2 text-sm leading-5 text-[var(--text-secondary)]">Cadastre a primeira matéria para acompanhar notas, faltas e avaliações.</p>
     </div>
   );
 }
@@ -91,7 +91,7 @@ export default function App() {
       <div className="grid gap-5">
         <header>
           <p className="text-sm text-[var(--text-secondary)]">{app.activeSemester.name}</p>
-          <h1 className="text-3xl font-bold">Início</h1>
+          <h1 className="text-3xl font-bold tracking-tight">Início</h1>
         </header>
         {app.activeSemester.subjects.length ? (
           <div className="grid gap-4">
@@ -103,7 +103,7 @@ export default function App() {
           <EmptyHome />
         )}
         <button
-          className="fixed bottom-28 right-[calc(50%-200px)] z-30 grid h-14 w-14 place-items-center rounded-full bg-[var(--accent)] text-white shadow-2xl shadow-blue-950/40 max-[430px]:right-5"
+          className="fixed bottom-28 right-[calc(50%-200px)] z-30 grid h-14 w-14 place-items-center rounded-full bg-[var(--accent)] text-white shadow-2xl shadow-blue-950/40 transition active:scale-95 max-[430px]:right-5"
           type="button"
           onClick={() => openSubjectForm()}
           aria-label="Adicionar matéria"

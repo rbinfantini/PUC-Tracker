@@ -75,7 +75,7 @@ export function EvaluationForm({ open, evaluation, onClose, onSubmit }: Evaluati
           <option value="atividade">Atividade</option>
           <option value="extensionista">Extensionista</option>
         </Select>
-        <label className="flex items-center justify-between rounded-2xl border border-white/10 bg-white/[0.06] p-3 text-sm">
+        <label className="flex min-h-12 items-center justify-between rounded-2xl border border-white/10 bg-white/[0.065] px-3.5 py-3 text-sm font-medium text-[var(--text-secondary)]">
           <span>É só entrega?</span>
           <input type="checkbox" checked={type === 'extensionista' || isDelivery} disabled={type === 'extensionista'} onChange={(event) => setIsDelivery(event.target.checked)} />
         </label>
@@ -86,8 +86,8 @@ export function EvaluationForm({ open, evaluation, onClose, onSubmit }: Evaluati
         </Select>
         <Input label="Data" type="date" value={date} onChange={(event) => setDate(event.target.value)} />
         <Input label="Nota máxima" inputMode="decimal" value={maxGrade} onChange={(event) => setMaxGrade(event.target.value)} />
-        {error ? <p className="rounded-2xl bg-[var(--red)]/10 px-3 py-2 text-sm text-[var(--red)]">{error}</p> : null}
-        <Button type="submit" variant="primary">
+        {error ? <p className="rounded-2xl border border-[var(--red)]/20 bg-[var(--red)]/10 px-3 py-2 text-sm text-[var(--red)]">{error}</p> : null}
+        <Button type="submit" variant="primary" className="mt-1">
           Salvar avaliação
         </Button>
       </form>

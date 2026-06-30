@@ -10,8 +10,8 @@ interface AppShellProps {
 
 export function AppShell({ children, activeTab, onTabChange }: AppShellProps) {
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[430px] border-x border-white/[0.04] bg-[rgba(10,10,15,0.78)]">
-      <main className="min-h-screen px-4 pb-28 pt-5">{children}</main>
+    <div className="mx-auto min-h-screen w-full max-w-[430px] border-x border-white/[0.04] bg-[rgba(10,10,15,0.82)]">
+      <main className="min-h-screen px-4 pb-32 pt-5 sm:px-5">{children}</main>
       <BottomNav active={activeTab} onChange={onTabChange} />
     </div>
   );

@@ -84,13 +84,13 @@ export function SubjectForm({ open, subject, onClose, onSubmit }: SubjectFormPro
         <Input label="Nome curto" required value={name} onChange={(event) => setName(event.target.value)} placeholder="EDL" />
         <Input label="Nome completo" value={fullName} onChange={(event) => setFullName(event.target.value)} placeholder="Estrutura de Dados Linear" />
         <Input label="Professor" value={professor} onChange={(event) => setProfessor(event.target.value)} placeholder="Opcional" />
-        <div className="grid gap-2 text-sm text-[var(--text-secondary)]">
-          <span>Cor</span>
-          <div className="grid grid-cols-10 gap-2">
+        <div className="grid gap-2 text-sm font-medium text-[var(--text-secondary)]">
+          <span className="px-1">Cor</span>
+          <div className="grid grid-cols-5 gap-2.5 rounded-3xl bg-white/[0.045] p-3">
             {SUBJECT_COLORS.map((option) => (
               <button
                 key={option}
-                className={`h-8 rounded-full border ${color === option ? 'border-white' : 'border-white/10'}`}
+                className={`h-9 rounded-full border-2 transition active:scale-95 ${color === option ? 'border-white shadow-[0_0_0_4px_rgba(255,255,255,0.08)]' : 'border-white/10'}`}
                 style={{ background: option }}
                 type="button"
                 onClick={() => setColor(option)}
@@ -110,9 +110,9 @@ export function SubjectForm({ open, subject, onClose, onSubmit }: SubjectFormPro
           <Input label="Carga horária" inputMode="numeric" required value={totalHours} onChange={(event) => setTotalHours(event.target.value)} />
           <Input label="Nota mínima" inputMode="decimal" required value={minPassGrade} onChange={(event) => setMinPassGrade(event.target.value)} />
         </div>
-        {error ? <p className="rounded-2xl bg-[var(--red)]/10 px-3 py-2 text-sm text-[var(--red)]">{error}</p> : null}
-        <Button type="submit" variant="primary">
-          Salvar
+        {error ? <p className="rounded-2xl border border-[var(--red)]/20 bg-[var(--red)]/10 px-3 py-2 text-sm text-[var(--red)]">{error}</p> : null}
+        <Button type="submit" variant="primary" className="mt-1">
+          Salvar matéria
         </Button>
       </form>
     </BottomSheet>

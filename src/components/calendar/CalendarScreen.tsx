@@ -32,21 +32,23 @@ export function CalendarScreen({ semester }: CalendarScreenProps) {
     <div className="grid gap-5">
       <header>
         <p className="text-sm text-[var(--text-secondary)]">{semester.name}</p>
-        <h1 className="text-3xl font-bold">Calendário</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Calendário</h1>
       </header>
       <CalendarMonthGrid month={month} events={events} onMonthChange={setMonth} onSelect={setSelected} />
       <Button icon={<Download size={16} />} type="button" variant="primary" onClick={() => downloadFile(`puc_tracker_${semester.name}.ics`, generateICS(semester), 'text/calendar')}>
-        Exportar para Google Calendar
+        Exportar calendário
       </Button>
       <AgendaList events={events} onSelect={setSelected} />
       <Modal open={Boolean(selected)} title="Avaliação" onClose={() => setSelected(null)}>
         {selected ? (
           <div className="grid gap-3">
             <p className="text-sm text-[var(--text-secondary)]">{selected.subjectName}</p>
-            <h3 className="text-2xl font-bold">{selected.evaluation.name}</h3>
-            <p>Tipo: {selected.evaluation.type}</p>
-            <p>Data: {formatShortDate(selected.evaluation.date)}</p>
-            <p>Nota: {formatGrade(selected.evaluation.grade)}</p>
+            <h3 className="text-2xl font-bold tracking-tight">{selected.evaluation.name}</h3>
+            <div className="grid gap-2 rounded-[22px] bg-white/[0.055] p-4 text-sm">
+              <p>Tipo: {selected.evaluation.type}</p>
+              <p>Data: {formatShortDate(selected.evaluation.date)}</p>
+              <p>Nota: {formatGrade(selected.evaluation.grade)}</p>
+            </div>
           </div>
         ) : null}
       </Modal>

@@ -26,22 +26,22 @@ export function ExamModeModal({ open, subject, onClose }: ExamModeModalProps) {
   const pendingDeliveries = subject.evaluations.filter((evaluation) => evaluation.isDelivery && !evaluation.delivered);
 
   return (
-    <Modal open={open} title="Modo Prova" onClose={onClose}>
+    <Modal open={open} title="Modo prova" onClose={onClose}>
       <div className="grid gap-4">
         <div className="rounded-[24px] bg-white/[0.06] p-4">
           <p className="text-sm text-[var(--text-secondary)]">{subject.name}</p>
-          <h3 className="mt-1 text-2xl font-bold">{next ? next.name : 'Sem próxima avaliação'}</h3>
+          <h3 className="mt-1 text-2xl font-bold tracking-tight">{next ? next.name : 'Sem próxima avaliação'}</h3>
           <p className="mt-2 text-sm text-[var(--text-secondary)]">
             {next ? `${formatShortDate(next.date)} — ${formatCountdown(next.date)}` : 'Cadastre uma data para aparecer aqui.'}
           </p>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-[22px] bg-white/[0.06] p-4">
-            <p className="text-xs text-[var(--text-secondary)]">Média parcial</p>
+            <p className="text-xs font-medium text-[var(--text-secondary)]">Média parcial</p>
             <p className="mt-1 text-2xl font-bold">{formatGrade(grade.average)}</p>
           </div>
           <div className="rounded-[22px] bg-white/[0.06] p-4">
-            <p className="text-xs text-[var(--text-secondary)]">Pior cenário</p>
+            <p className="text-xs font-medium text-[var(--text-secondary)]">Pior cenário</p>
             <p className="mt-1 text-2xl font-bold">{formatGrade(grade.worstCase)}</p>
           </div>
         </div>
@@ -51,7 +51,7 @@ export function ExamModeModal({ open, subject, onClose }: ExamModeModalProps) {
             {grade.missing.length ? grade.missing.map((item) => <Badge key={item}>{item}</Badge>) : <Badge tone="green">Nada obrigatório</Badge>}
           </div>
         </section>
-        <p className="rounded-[22px] bg-white/[0.06] p-4 text-sm text-[var(--text-secondary)]">{requiredGradeText(subject)}</p>
+        <p className="rounded-[22px] bg-white/[0.06] p-4 text-sm leading-5 text-[var(--text-secondary)]">{requiredGradeText(subject)}</p>
         {grade.shouldShowPs ? <Badge tone="yellow">PS relevante para esta matéria</Badge> : null}
         {pendingDeliveries.length ? (
           <section>

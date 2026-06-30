@@ -57,7 +57,7 @@ export function SettingsScreen({ data, semester, onRenameSemester, onEndSemester
     <div className="grid gap-5">
       <header>
         <p className="text-sm text-[var(--text-secondary)]">PUC Tracker</p>
-        <h1 className="text-3xl font-bold">Configurações</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Configurações</h1>
       </header>
 
       <Card className="grid gap-4">
@@ -68,7 +68,7 @@ export function SettingsScreen({ data, semester, onRenameSemester, onEndSemester
             Renomear
           </Button>
           <Button icon={<RotateCcw size={16} />} type="button" onClick={onEndSemester}>
-            Encerrar semestre
+            Encerrar
           </Button>
         </div>
       </Card>
@@ -82,13 +82,13 @@ export function SettingsScreen({ data, semester, onRenameSemester, onEndSemester
         <Button icon={<FileUp size={16} />} type="button" onClick={() => inputRef.current?.click()}>
           Importar JSON
         </Button>
-        {message ? <p className="text-sm text-[var(--text-secondary)]">{message}</p> : null}
+        {message ? <p className="rounded-2xl bg-[var(--green)]/10 px-3 py-2 text-sm text-[var(--green)]">{message}</p> : null}
       </Card>
 
       <Card>
         <h2 className="text-lg font-bold">Sobre</h2>
         <p className="mt-2 text-sm text-[var(--text-secondary)]">PUC Tracker · Versão 1.0.0</p>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">App pessoal para acompanhamento de notas e faltas.</p>
+        <p className="mt-2 text-sm leading-5 text-[var(--text-secondary)]">App pessoal para acompanhamento de notas e faltas.</p>
       </Card>
     </div>
   );

@@ -18,10 +18,10 @@ export function formatCountdown(value?: string, now = new Date()): string {
 
   const days = differenceInCalendarDays(date, now);
   if (days === 0) return 'hoje';
-  if (days === 1) return 'amanha';
+  if (days === 1) return 'amanhã';
   if (days === -1) return 'ontem';
   if (days > 1) return `em ${days} dias`;
-  return `ha ${Math.abs(days)} dias`;
+  return `há ${Math.abs(days)} dias`;
 }
 
 export function monthKey(date: Date): string {

@@ -19,31 +19,31 @@ export function EvaluationList({ title, evaluations, readOnly, onGradeChange, on
 
   return (
     <section className="grid gap-3">
-      <h3 className="px-1 text-sm font-semibold uppercase tracking-wide text-[var(--text-secondary)]">{title}</h3>
+      <h3 className="px-1 text-xs font-bold uppercase tracking-wide text-[var(--text-secondary)]">{title}</h3>
       {evaluations.map((evaluation) => (
-        <article key={evaluation.id} className="glass rounded-[24px] p-4">
+        <article key={evaluation.id} className="glass rounded-[22px] p-4">
           <div className="flex items-start justify-between gap-3">
-            <div>
-              <h4 className="font-bold">{evaluation.name}</h4>
+            <div className="min-w-0">
+              <h4 className="truncate font-bold">{evaluation.name}</h4>
               <p className="mt-1 flex items-center gap-1.5 text-xs text-[var(--text-secondary)]">
-                <Calendar size={14} />
+                <Calendar size={14} className="shrink-0" />
                 {formatShortDate(evaluation.date)}
               </p>
             </div>
-            <div className="flex gap-1">
-              <button className="rounded-full bg-white/10 p-2 disabled:opacity-40" disabled={readOnly} type="button" onClick={() => onEdit(evaluation)} aria-label="Editar avaliação">
+            <div className="flex shrink-0 gap-1">
+              <button className="rounded-full bg-white/10 p-2 transition active:scale-95 disabled:opacity-40" disabled={readOnly} type="button" onClick={() => onEdit(evaluation)} aria-label="Editar avaliação">
                 <Pencil size={15} />
               </button>
               {!evaluation.isPS ? (
-                <button className="rounded-full bg-white/10 p-2 text-[var(--red)] disabled:opacity-40" disabled={readOnly} type="button" onClick={() => onDelete(evaluation.id)} aria-label="Excluir avaliação">
+                <button className="rounded-full bg-white/10 p-2 text-[var(--red)] transition active:scale-95 disabled:opacity-40" disabled={readOnly} type="button" onClick={() => onDelete(evaluation.id)} aria-label="Excluir avaliação">
                   <Trash2 size={15} />
                 </button>
               ) : null}
             </div>
           </div>
-          <div className="mt-4 flex items-center justify-between gap-3">
+          <div className="mt-4 flex flex-wrap items-center justify-between gap-3">
             {evaluation.isDelivery ? (
-              <label className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
+              <label className="flex min-h-10 items-center gap-2 rounded-2xl bg-white/[0.055] px-3 text-sm text-[var(--text-secondary)]">
                 <input type="checkbox" checked={evaluation.delivered} disabled={readOnly} onChange={(event) => onDeliveryChange(evaluation.id, event.target.checked)} />
                 {evaluation.delivered ? 'Entregue' : 'Pendente'}
               </label>

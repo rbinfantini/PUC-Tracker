@@ -67,40 +67,41 @@ export function SubjectDetail({
   return (
     <div className="grid gap-5">
       <header className="flex items-center gap-3">
-        <button className="rounded-full bg-white/10 p-2" type="button" onClick={onBack} aria-label="Voltar">
+        <button className="rounded-full bg-white/10 p-2.5 transition active:scale-95" type="button" onClick={onBack} aria-label="Voltar">
           <ArrowLeft size={20} />
         </button>
         <div className="min-w-0">
-          <p className="text-sm text-[var(--text-secondary)]">{subject.fullName || subject.name}</p>
-          <h1 className="truncate text-2xl font-bold">{subject.name}</h1>
+          <p className="truncate text-sm text-[var(--text-secondary)]">{subject.fullName || subject.name}</p>
+          <h1 className="truncate text-2xl font-bold tracking-tight">{subject.name}</h1>
         </div>
       </header>
 
-      <section className="glass rounded-[30px] border-t-4 p-5" style={{ borderTopColor: subject.color }}>
+      <section className="glass overflow-hidden rounded-[28px] p-5">
+        <div className="-mx-5 -mt-5 mb-4 h-1.5" style={{ background: subject.color }} />
         <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-sm text-[var(--text-secondary)]">{subject.professor || 'Professor nao informado'}</p>
+          <div className="min-w-0">
+            <p className="truncate text-sm text-[var(--text-secondary)]">{subject.professor || 'Professor não informado'}</p>
             <h2 className="mt-1 text-lg font-bold">{subject.gradeModel.toUpperCase()}</h2>
           </div>
           <Badge tone={grade.status === 'approved' ? 'green' : grade.status === 'risk' ? 'red' : 'blue'}>{statusLabel(grade.status)}</Badge>
         </div>
         <div className="mt-5 grid grid-cols-2 gap-3">
-          <div className="rounded-[24px] bg-white/[0.06] p-4">
-            <p className="text-xs text-[var(--text-secondary)]">{grade.isPartial ? 'MF parcial' : 'MF final'}</p>
-            <p className="mt-1 text-3xl font-bold">{formatGrade(grade.average)}</p>
+          <div className="rounded-[22px] bg-white/[0.065] p-4">
+            <p className="text-xs font-medium text-[var(--text-secondary)]">{grade.isPartial ? 'MF parcial' : 'MF final'}</p>
+            <p className="mt-1 text-3xl font-bold leading-none">{formatGrade(grade.average)}</p>
           </div>
-          <div className="rounded-[24px] bg-white/[0.06] p-4">
-            <p className="text-xs text-[var(--text-secondary)]">Pior cenário</p>
-            <p className="mt-1 text-3xl font-bold">{formatGrade(grade.worstCase)}</p>
+          <div className="rounded-[22px] bg-white/[0.065] p-4">
+            <p className="text-xs font-medium text-[var(--text-secondary)]">Pior cenário</p>
+            <p className="mt-1 text-3xl font-bold leading-none">{formatGrade(grade.worstCase)}</p>
           </div>
         </div>
         {grade.missing.length ? (
           <div className="mt-4">
-            <p className="mb-2 text-sm text-[var(--text-secondary)]">Faltam notas</p>
+            <p className="mb-2 text-sm font-medium text-[var(--text-secondary)]">Faltam notas</p>
             <div className="flex flex-wrap gap-2">{grade.missing.map((item) => <Badge key={item}>{item}</Badge>)}</div>
           </div>
         ) : null}
-        {grade.psMessage ? <p className="mt-4 text-sm text-[var(--yellow)]">{grade.psMessage}</p> : null}
+        {grade.psMessage ? <p className="mt-4 rounded-2xl bg-[var(--yellow)]/10 px-3 py-2 text-sm text-[var(--yellow)]">{grade.psMessage}</p> : null}
       </section>
 
       <AbsenceControl subject={subject} readOnly={readOnly} onChange={onAbsenceChange} />
@@ -113,7 +114,7 @@ export function SubjectDetail({
           Avaliação
         </Button>
         <Button icon={<ClipboardList size={16} />} type="button" onClick={() => setExamOpen(true)}>
-          Modo Prova
+          Modo prova
         </Button>
         <Button disabled={readOnly} variant="danger" icon={<Trash2 size={16} />} type="button" onClick={onDeleteSubject}>
           Excluir
@@ -121,7 +122,7 @@ export function SubjectDetail({
       </div>
 
       <Button disabled={readOnly} variant="secondary" type="button" onClick={onMarkPS}>
-        Marcar PS / Vou fazer PS
+        Marcar PS
       </Button>
 
       <EvaluationList title="1º bimestre" evaluations={groups.first} readOnly={readOnly} onGradeChange={(id, gradeValue) => onUpdateEvaluation(id, { grade: gradeValue })} onDeliveryChange={(id, delivered) => onUpdateEvaluation(id, { delivered })} onEdit={openEditEvaluation} onDelete={onDeleteEvaluation} />
