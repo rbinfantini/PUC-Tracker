@@ -43,6 +43,19 @@ const semester: Semester = {
           isDelivery: false,
           delivered: false,
           isPS: false
+        },
+        {
+          id: 'eval-3',
+          subjectId: 'subject-1',
+          name: 'Data invalida',
+          type: 'atividade',
+          role: 'A2',
+          date: '10/04/2026',
+          maxGrade: 10,
+          grade: null,
+          isDelivery: false,
+          delivered: false,
+          isPS: false
         }
       ]
     }
@@ -51,17 +64,23 @@ const semester: Semester = {
 
 describe('exportacao ICS', () => {
   it('gera calendario valido', () => {
-    expect(generateICS(semester)).toContain('BEGIN:VCALENDAR');
+    const ics = generateICS(semester);
+
+    expect(ics).toContain('BEGIN:VCALENDAR');
+    expect(ics).toContain('END:VCALENDAR');
   });
 
-  it('inclui avaliacoes com data', () => {
+  it('inclui avaliacoes com data em evento all-day', () => {
     const ics = generateICS(semester);
 
     expect(ics).toContain('SUMMARY:EDL — P1');
     expect(ics).toContain('DTSTART;VALUE=DATE:20260410');
   });
 
-  it('ignora avaliacoes sem data', () => {
-    expect(generateICS(semester)).not.toContain('Sem data');
+  it('ignora avaliacoes sem data ou com data invalida', () => {
+    const ics = generateICS(semester);
+
+    expect(ics).not.toContain('Sem data');
+    expect(ics).not.toContain('Data invalida');
   });
 });

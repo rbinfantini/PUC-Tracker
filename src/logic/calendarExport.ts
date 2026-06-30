@@ -1,15 +1,23 @@
-import { format, parseISO } from 'date-fns';
 import type { CalendarEvent, Semester } from '../types';
 
 function escapeICS(value: string): string {
   return value.replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\n/g, '\\n');
 }
 
+function toICSDate(value?: string): string | null {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return null;
+  return value.replace(/-/g, '');
+}
+
+function utcTimestamp(date = new Date()): string {
+  return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+}
+
 export function getSemesterEvents(semester: Semester): CalendarEvent[] {
   return semester.subjects
     .flatMap((subject) =>
       subject.evaluations
-        .filter((evaluation) => Boolean(evaluation.date))
+        .filter((evaluation) => Boolean(toICSDate(evaluation.date)))
         .map((evaluation) => ({
           id: evaluation.id,
           subjectId: subject.id,
@@ -22,7 +30,7 @@ export function getSemesterEvents(semester: Semester): CalendarEvent[] {
 }
 
 export function generateICS(semester: Semester): string {
-  const now = format(new Date(), "yyyyMMdd'T'HHmmss'Z'");
+  const now = utcTimestamp();
   const events = getSemesterEvents(semester);
   const lines = [
     'BEGIN:VCALENDAR',
@@ -33,9 +41,9 @@ export function generateICS(semester: Semester): string {
   ];
 
   events.forEach((event) => {
-    const date = parseISO(event.evaluation.date as string);
-    const day = format(date, 'yyyyMMdd');
-    const title = `${event.subjectName} — ${event.evaluation.name}`;
+    const day = toICSDate(event.evaluation.date);
+    if (!day) return;
+    const title = `${event.subjectName} \u2014 ${event.evaluation.name}`;
 
     lines.push(
       'BEGIN:VEVENT',

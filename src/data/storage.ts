@@ -42,7 +42,7 @@ export function saveAppData(data: AppData): void {
 
 export function validateImportedData(value: unknown): AppData {
   if (!isAppData(value)) {
-    throw new Error('Arquivo invalido ou versao incompatível.');
+    throw new Error('Arquivo invalido ou versao incompativel.');
   }
 
   const active = value.semesters.find((semester) => semester.id === value.activeSemesterId);

@@ -63,6 +63,18 @@ describe('Peso 1', () => {
 
     expect(result.average).toBe(8);
   });
+
+  it('nao aprova definitivamente quando a media ainda e parcial', () => {
+    const result = calculateSubjectGrade(subject('peso1', [
+      evaluation({ role: 'T1', grade: 10 }),
+      evaluation({ role: 'T2', grade: null })
+    ]));
+
+    expect(result.average).toBe(10);
+    expect(result.finalAverage).toBeNull();
+    expect(result.isPartial).toBe(true);
+    expect(result.status).not.toBe('approved');
+  });
 });
 
 describe('Peso 2', () => {
@@ -117,6 +129,33 @@ describe('Peso 2', () => {
     expect(result.appliedPs).toBeNull();
     expect(result.average).toBe(7);
     expect(result.psMessage).toBe('PS nao altera a media neste caso');
+  });
+
+  it('nao mostra PS automaticamente enquanto a media estruturada ainda e parcial', () => {
+    const result = calculateSubjectGrade(subject('peso2', [
+      evaluation({ role: 'P1', grade: 2 }),
+      evaluation({ role: 'A1', type: 'atividade', grade: null }),
+      evaluation({ role: 'P2', grade: 2 }),
+      evaluation({ role: 'A2', type: 'atividade', grade: null }),
+      evaluation({ role: 'PS', isPS: true, enabled: false, grade: null })
+    ]));
+
+    expect(result.isPartial).toBe(true);
+    expect(result.shouldShowPs).toBe(false);
+  });
+
+  it('mostra PS automaticamente quando a media final fica abaixo do minimo', () => {
+    const result = calculateSubjectGrade(subject('peso2', [
+      evaluation({ role: 'P1', grade: 2 }),
+      evaluation({ role: 'A1', type: 'atividade', grade: 4 }),
+      evaluation({ role: 'P2', grade: 3 }),
+      evaluation({ role: 'A2', type: 'atividade', grade: 4 }),
+      evaluation({ role: 'PS', isPS: true, enabled: false, grade: null })
+    ]));
+
+    expect(result.isPartial).toBe(false);
+    expect(result.average).toBeLessThan(5);
+    expect(result.shouldShowPs).toBe(true);
   });
 });
 

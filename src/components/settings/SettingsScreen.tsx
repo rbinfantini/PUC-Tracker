@@ -1,4 +1,4 @@
-import { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { Download, FileUp, RotateCcw } from 'lucide-react';
 import type { AppData, Semester } from '../../types';
 import { Button } from '../ui/Button';
@@ -31,6 +31,10 @@ export function SettingsScreen({ data, semester, onRenameSemester, onEndSemester
   const [name, setName] = useState(semester.name);
   const [message, setMessage] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    setName(semester.name);
+  }, [semester.id, semester.name]);
 
   const importFile = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];

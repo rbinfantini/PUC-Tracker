@@ -13,13 +13,19 @@ interface EvaluationFormProps {
   onSubmit: (input: EvaluationInput | Partial<Evaluation>) => void;
 }
 
+function parsePositiveNumber(value: string): number | null {
+  const parsed = Number(value.trim().replace(',', '.'));
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
 export function EvaluationForm({ open, evaluation, onClose, onSubmit }: EvaluationFormProps) {
   const [name, setName] = useState('');
   const [type, setType] = useState<Evaluation['type']>('prova');
   const [isDelivery, setIsDelivery] = useState(false);
   const [bimester, setBimester] = useState('');
   const [date, setDate] = useState('');
-  const [maxGrade, setMaxGrade] = useState(10);
+  const [maxGrade, setMaxGrade] = useState('10');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!open) return;
@@ -28,20 +34,33 @@ export function EvaluationForm({ open, evaluation, onClose, onSubmit }: Evaluati
     setIsDelivery(evaluation?.isDelivery ?? false);
     setBimester(evaluation?.bimester ? String(evaluation.bimester) : '');
     setDate(evaluation?.date ?? '');
-    setMaxGrade(evaluation?.maxGrade ?? 10);
+    setMaxGrade(String(evaluation?.maxGrade ?? 10).replace('.', ','));
+    setError('');
   }, [open, evaluation]);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    if (!name.trim()) return;
+    const parsedMaxGrade = parsePositiveNumber(maxGrade);
+
+    if (!name.trim()) {
+      setError('Informe o nome da avaliação.');
+      return;
+    }
+    if (!parsedMaxGrade) {
+      setError('Informe uma nota máxima maior que zero.');
+      return;
+    }
+
+    const deliveryOnly = type === 'extensionista' ? true : isDelivery;
     const payload = {
       name,
       type,
       role: evaluation?.role ?? name,
-      isDelivery: type === 'extensionista' ? true : isDelivery,
+      isDelivery: deliveryOnly,
+      grade: deliveryOnly ? null : evaluation?.grade,
       bimester: bimester ? (Number(bimester) as 1 | 2) : undefined,
       date: date || undefined,
-      maxGrade
+      maxGrade: parsedMaxGrade
     };
     onSubmit(payload);
     onClose();
@@ -66,7 +85,8 @@ export function EvaluationForm({ open, evaluation, onClose, onSubmit }: Evaluati
           <option value="2">2º bimestre</option>
         </Select>
         <Input label="Data" type="date" value={date} onChange={(event) => setDate(event.target.value)} />
-        <Input label="Nota máxima" type="number" min={1} step="0.1" value={maxGrade} onChange={(event) => setMaxGrade(Number(event.target.value))} />
+        <Input label="Nota máxima" inputMode="decimal" value={maxGrade} onChange={(event) => setMaxGrade(event.target.value)} />
+        {error ? <p className="rounded-2xl bg-[var(--red)]/10 px-3 py-2 text-sm text-[var(--red)]">{error}</p> : null}
         <Button type="submit" variant="primary">
           Salvar avaliação
         </Button>

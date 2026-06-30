@@ -21,14 +21,20 @@ const models: Array<{ value: GradeModel; label: string }> = [
   { value: 'lisbete', label: 'Lisbete' }
 ];
 
+function parsePositiveNumber(value: string): number | null {
+  const parsed = Number(value.trim().replace(',', '.'));
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : null;
+}
+
 export function SubjectForm({ open, subject, onClose, onSubmit }: SubjectFormProps) {
   const [name, setName] = useState('');
   const [fullName, setFullName] = useState('');
   const [professor, setProfessor] = useState('');
   const [color, setColor] = useState(SUBJECT_COLORS[0]);
   const [gradeModel, setGradeModel] = useState<GradeModel>('peso1');
-  const [totalHours, setTotalHours] = useState(80);
-  const [minPassGrade, setMinPassGrade] = useState(5);
+  const [totalHours, setTotalHours] = useState('80');
+  const [minPassGrade, setMinPassGrade] = useState('5');
+  const [error, setError] = useState('');
 
   useEffect(() => {
     if (!open) return;
@@ -37,14 +43,38 @@ export function SubjectForm({ open, subject, onClose, onSubmit }: SubjectFormPro
     setProfessor(subject?.professor ?? '');
     setColor(subject?.color ?? SUBJECT_COLORS[0]);
     setGradeModel(subject?.gradeModel ?? 'peso1');
-    setTotalHours(subject?.totalHours ?? 80);
-    setMinPassGrade(subject?.minPassGrade ?? 5);
+    setTotalHours(String(subject?.totalHours ?? 80));
+    setMinPassGrade(String(subject?.minPassGrade ?? 5).replace('.', ','));
+    setError('');
   }, [open, subject]);
 
   const submit = (event: FormEvent) => {
     event.preventDefault();
-    if (!name.trim()) return;
-    onSubmit({ name, fullName, professor, color, gradeModel, totalHours, minPassGrade });
+    const parsedHours = parsePositiveNumber(totalHours);
+    const parsedMinPassGrade = parsePositiveNumber(minPassGrade);
+
+    if (!name.trim()) {
+      setError('Informe o nome curto da matéria.');
+      return;
+    }
+    if (!parsedHours) {
+      setError('Informe uma carga horária maior que zero.');
+      return;
+    }
+    if (!parsedMinPassGrade) {
+      setError('Informe uma nota mínima maior que zero.');
+      return;
+    }
+
+    onSubmit({
+      name,
+      fullName,
+      professor,
+      color,
+      gradeModel,
+      totalHours: parsedHours,
+      minPassGrade: parsedMinPassGrade
+    });
     onClose();
   };
 
@@ -77,9 +107,10 @@ export function SubjectForm({ open, subject, onClose, onSubmit }: SubjectFormPro
           ))}
         </Select>
         <div className="grid grid-cols-2 gap-3">
-          <Input label="Carga horária" type="number" min={1} required value={totalHours} onChange={(event) => setTotalHours(Number(event.target.value))} />
-          <Input label="Nota mínima" inputMode="decimal" required value={minPassGrade} onChange={(event) => setMinPassGrade(Number(event.target.value.replace(',', '.')))} />
+          <Input label="Carga horária" inputMode="numeric" required value={totalHours} onChange={(event) => setTotalHours(event.target.value)} />
+          <Input label="Nota mínima" inputMode="decimal" required value={minPassGrade} onChange={(event) => setMinPassGrade(event.target.value)} />
         </div>
+        {error ? <p className="rounded-2xl bg-[var(--red)]/10 px-3 py-2 text-sm text-[var(--red)]">{error}</p> : null}
         <Button type="submit" variant="primary">
           Salvar
         </Button>

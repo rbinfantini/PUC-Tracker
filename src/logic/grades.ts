@@ -66,7 +66,9 @@ function calculatePeso1(subject: Subject): GradeResult {
   const rawAverage = average(psResult.values);
   const finalAverage = rawAverage === null ? null : roundGrade(rawAverage);
   const isPartial = missing.length > 0 || finalAverage === null;
-  const shouldShowPs = Boolean(ps?.enabled || hasGrade(ps) || (hasGrade(p1) && hasGrade(p2) && finalAverage !== null && finalAverage < subject.minPassGrade));
+  const shouldShowPs = Boolean(
+    ps?.enabled || hasGrade(ps) || (!isPartial && hasGrade(p1) && hasGrade(p2) && finalAverage !== null && finalAverage < subject.minPassGrade)
+  );
 
   return {
     average: finalAverage,
@@ -83,11 +85,6 @@ function calculatePeso1(subject: Subject): GradeResult {
 
 function getModelWeight(model: GradeModel): number {
   return model === 'peso2' ? 2 : 3;
-}
-
-function activityAverage(evaluations: Evaluation[], roles: string[]): number | null {
-  const grades = roles.map((role) => findByRole(evaluations, role)).filter(hasGrade).map((evaluation) => evaluation.grade);
-  return average(grades);
 }
 
 function requiredRoles(model: GradeModel): string[] {
@@ -187,11 +184,10 @@ function calculateStructured(subject: Subject): GradeResult {
   const p2 = findByRole(subject.evaluations, 'P2');
   const ps = subject.evaluations.find((evaluation) => evaluation.isPS);
   const isPartial = missing.length > 0 || averageValue === null;
-  const referenceAverage = worstCase ?? averageValue;
   const shouldShowPs = Boolean(
     ps?.enabled ||
       hasGrade(ps) ||
-      (hasGrade(p1) && hasGrade(p2) && referenceAverage !== null && referenceAverage < subject.minPassGrade)
+      (!isPartial && hasGrade(p1) && hasGrade(p2) && averageValue !== null && averageValue < subject.minPassGrade)
   );
 
   return {
